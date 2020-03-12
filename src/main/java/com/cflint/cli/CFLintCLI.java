@@ -340,14 +340,18 @@ public class CFLintCLI {
         }
         main.stdOut = cmd.hasOption(Settings.STDOUT);
         if (main.isValid()) {
-            main.execute(configBuilder.build());
+            if(main.execute(configBuilder.build()) > 0) {
+            	// Exit with error
+            	System.exit(-1);
+            };
         } else {
             final HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp(CFLINT_USAGE, helpOptions);
+            System.exit(-1);
         }
     }
 
-    private void execute(final CFLintConfiguration cfLintConfig) throws IOException, TransformerException,
+    private int execute(final CFLintConfiguration cfLintConfig) throws IOException, TransformerException,
             MarshallerException, JAXBException, CFLintScanException, CFLintConfigurationException {
         final CFLintAPI api = new CFLintAPI(cfLintConfig);
         api.setVerbose(verbose);
@@ -419,6 +423,8 @@ public class CFLintCLI {
             display("Total files scanned: " + lintResult.getStats().getFileCount());
             display("Total LOC scanned: " + lintResult.getStats().getTotalLines());
         }
+        
+        return lintResult.getStats().getCounts().noBugs();
     }
 
     private void display(final String text) {
