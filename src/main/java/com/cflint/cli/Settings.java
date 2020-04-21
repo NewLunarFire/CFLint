@@ -192,6 +192,11 @@ public class Settings {
     public static final String RULE_GROUPS = "rulegroups";
 
     /**
+     * Fail the command if bugs with a level equal or higher that this are found
+     */
+    public static final String FAILURE_LEVEL = "failurelevel";
+    
+    /**
      * Cannot be constructed.
      */
     private Settings() {

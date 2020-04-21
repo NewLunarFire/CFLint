@@ -18,6 +18,7 @@ import javax.xml.transform.TransformerException;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.IOUtils;
 
+import com.cflint.Levels;
 import com.cflint.Version;
 import com.cflint.api.CFLintAPI;
 import com.cflint.api.CFLintResult;
@@ -62,6 +63,7 @@ public class CFLintCLI {
     private Boolean stdOut = false;
     private boolean strictInclude;
 	private String environmentName;
+	private Levels failureLevel;
 
     public static void main(final String[] args) throws Exception {
         final Options commandOptions = new Options();
@@ -104,7 +106,7 @@ public class CFLintCLI {
         Option optionSTDOUT = new Option(Settings.STDOUT, false, "output to stdout only");
         Option optionLIST_RULE_GROUPS = new Option(Settings.LIST_RULE_GROUPS, false, "list rule groups");
         Option optionRULE_GROUPS = new Option(Settings.RULE_GROUPS, true, "rule groups");
-
+        Option optionFAIL_LEVEL = new Option(Settings.FAILURE_LEVEL, true, "failure level");
 
         // undocumented
         Option optionCONFIGFILE = new Option(Settings.CONFIGFILE, true, "specify the location of the config file");
@@ -146,7 +148,8 @@ public class CFLintCLI {
                         .addOption(optionRULE_GROUPS)
                         .addOption(optionCONFIGFILE)
                         .addOption(optionDEBUG)
-                        .addOption(optionD);
+                        .addOption(optionD)
+                        .addOption(optionFAIL_LEVEL);
 
         // documented options for HelpFormatter
         helpOptions.addOption(optionMARKDOWN)
@@ -184,7 +187,8 @@ public class CFLintCLI {
                         .addOption(optionLIST_RULE_GROUPS)
                         .addOption(optionRULE_GROUPS)
                         .addOption(optionDEBUG)
-                        .addOption(optionD);
+                        .addOption(optionD)
+                        .addOption(optionFAIL_LEVEL);
 
         final CommandLineParser parser = new GnuParser();
         final CommandLine cmd = parser.parse(commandOptions, args);
@@ -259,6 +263,10 @@ public class CFLintCLI {
         if (cmd.hasOption(Settings.RULE_GROUPS)) {
             final String rulegroups = cmd.getOptionValue(Settings.RULE_GROUPS);
             configBuilder.ruleGroups(rulegroups);
+        }
+        
+        if(cmd.hasOption(Settings.FAILURE_LEVEL)) {
+        	main.failureLevel = Levels.fromString(cmd.getOptionValue(Settings.FAILURE_LEVEL).toUpperCase());
         }
 
         main.quiet = (cmd.hasOption(Settings.Q) || cmd.hasOption(Settings.QUIET));
@@ -424,7 +432,10 @@ public class CFLintCLI {
             display("Total LOC scanned: " + lintResult.getStats().getTotalLines());
         }
         
-        return lintResult.getStats().getCounts().noBugs();
+        if(this.failureLevel == null)
+        	return 0;
+        
+        return lintResult.getStats().getCounts().getOverSeverity(this.failureLevel);
     }
 
     private void display(final String text) {

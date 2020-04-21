@@ -56,4 +56,20 @@ public class BugCounts {
 
         return 0;
     }
+    
+    public int getOverSeverity(final Levels minimumSeverity) {
+    	int total = 0;
+    	
+    	if(minimumSeverity == null) {
+    		return 0;
+    	}
+    	
+    	for(Levels severity: severityCounts.keySet()) {
+    		if(severity.getOrder() <= minimumSeverity.getOrder()) {
+    			total += severityCounts.get(severity);
+    		}
+    	}
+    	
+    	return total;
+    }
 }
