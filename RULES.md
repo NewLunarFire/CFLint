@@ -183,6 +183,7 @@ List of built-in rules and rule groups
         * maxLength = *20*
         * maxWords = *4*
         * ignoreUpperCaseScopes = *CGI,URL*
+        * ignoreUpperCaseNames  = *CFID,CFTOKEN*
         * ignoreAllCapsInScopes = *this,variables*
         * ignorePrefixPostfixOn = *thisTag*
         * case = *camelCase*
