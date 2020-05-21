@@ -53,10 +53,10 @@ public class CFLintCLI {
     private boolean textOutput = false;
     private String xmlOutFile = "cflint-result.xml";
     private String xmlstyle = CFLINT;
-    private String htmlOutFile = "cflint-result.html";
+    private String htmlOutFile = null;
     private String htmlStyle = "plain.xsl";
     private String jsonOutFile = "cflint-result.json";
-    private String textOutFile = "cflint-result.txt";
+    private String textOutFile = null;
     private String extensions;
     private Boolean stdIn = false;
     private String stdInFile = "source.cfc";
@@ -65,6 +65,16 @@ public class CFLintCLI {
 	private String environmentName;
 	private Levels failureLevel;
 
+	private Writer getWriter(String filename, boolean stdOut, String def) throws IOException {
+		if(filename != null) {
+			return new FileWriter(filename);
+		} else if(stdOut) {
+			return new OutputStreamWriter(System.out);
+		}
+		
+		return new FileWriter(def);
+	}
+	
     public static void main(final String[] args) throws Exception {
         final Options commandOptions = new Options();
         final Options helpOptions = new Options();
@@ -404,20 +414,20 @@ public class CFLintCLI {
             }
         }
         if (textOutput) {
-            try (final Writer textwriter = stdOut ? new OutputStreamWriter(System.out) : new FileWriter(textOutFile)) {
-                if (verbose) {
-                    display("Writing text" + (stdOut ? "." : " to " + textOutFile));
-                }
-                lintResult.writeText(textwriter);
-            }
+        	try (final Writer textwriter = getWriter(textOutFile, stdOut, "cflint-result.txt")) {
+        		if(verbose) {
+        			display("Writing Text" + (textOutFile != null ? (" to " + textOutFile) : (stdOut ? "." : " to cflint-result.txt")));
+        		}
+	            lintResult.writeText(textwriter);
+        	}
         }
         if (htmlOutput) {
-            try (final Writer htmlwriter = stdOut ? new OutputStreamWriter(System.out) : new FileWriter(htmlOutFile)) {
-                if (verbose) {
-                    display("Writing HTML (style: " + htmlStyle + ")" + (stdOut ? "." : " to " + htmlOutFile));
-                }
-                lintResult.writeHTML(htmlStyle, htmlwriter);
-            }
+        	try (final Writer htmlwriter = getWriter(htmlOutFile, stdOut, "cflint-result.html")) {
+        		if(verbose) {
+        			display("Writing HTML" + (htmlOutFile != null ? (" to " + htmlOutFile) : (stdOut ? "." : " to cflint-result.html")));
+        		}
+        		lintResult.writeHTML(htmlStyle, htmlwriter);
+        	}
         }
         if (jsonOutput) {
             try (final Writer jsonwriter = stdOut ? new OutputStreamWriter(System.out) : new FileWriter(jsonOutFile)) {
