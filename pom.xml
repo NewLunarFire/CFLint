@@ -2,14 +2,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.cflint</groupId>
 	<artifactId>CFLint</artifactId>
-	<version>1.5.1-SNAPSHOT</version>
+	<version>1.5.3</version>
 	<packaging>jar</packaging>
 
 	<name>CFLint</name>
 	<description>
 		A static code analysis tool for ColdFusion (in the spirit of FindBugs and Lint). With CFLint, you are able to analyze your ColdFusion code base for code violations.
 	</description>
-	<url>https://github.com/cflint/CFLint</url>
+	<url>https://github.com/NewLunarFire/CFLint</url>
 	<inceptionYear>2013</inceptionYear>
 	<organization>
 		<name>CFLint</name>
@@ -34,12 +34,17 @@
 			<organization>cfparser</organization>
 			<organizationUrl>https://github.com/denuno</organizationUrl>
 		</developer>
+		<developer>
+			<name>Tommy Savaria</name>
+			<email>tommysavaria@gmail.com</email>
+			<organizationUrl>https://github.com/newlunarfire</organizationUrl>
+		</developer>
 	</developers>
 
 	<scm>
-		<connection>scm:git:git@github.com:cflint/CFLint.git</connection>
-		<developerConnection>scm:git:git@github.com:cflint/CFLint.git</developerConnection>
-		<url>git@github.com:cflint/CFLint.git</url>
+		<connection>scm:git:git@github.com:NewLunarFire/CFLint.git</connection>
+		<developerConnection>scm:git:git@github.com:NewLunarFire/CFLint.git</developerConnection>
+		<url>git@github.com:NewLunarFire/CFLint.git</url>
 	</scm>
 
 	<repositories>
