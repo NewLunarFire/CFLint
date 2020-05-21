@@ -174,7 +174,7 @@ public class ArgumentNameChecker extends CFLintScannerAdapter {
         if (name.isInvalid(argument,context.getConfiguration().getParameter(this, "case"))) {
             context.addMessage("ARGUMENT_INVALID_NAME", argument, this, line, offset);
         }
-        if (name.isUpperCase(argument)) {
+        if (name.isUpperCase(argument) && !context.getConfiguration().getParameterNotNull(this,"ignoreUpperCaseNames").contains(argument)) {
             context.addMessage("ARGUMENT_ALLCAPS_NAME", argument, this, line, offset);
         }
         if (name.tooShort(argument)) {
